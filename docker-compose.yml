@@ -1,0 +1,89 @@
+services:
+  # Laravel Service Container
+  onfly_challenge_backend:
+    build:
+      args:
+        user: onfly_user
+        uid: 1000
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: onfly_challenge_backend
+    image: onfly_challenge_backend_image
+    restart: unless-stopped
+    depends_on:
+      - onfly_challenge_db
+    working_dir: /var/www
+    volumes:
+      - ./backend/:/var/www/
+    networks:
+      - onfly_challenge_network
+    env_file:
+      - ./backend/.env
+
+  # NGINX Service Container
+  onfly_challenge_webserver:
+    image: nginx:alpine
+    container_name: onfly_challenge_webserver
+    restart: unless-stopped
+    depends_on:
+      -   onfly_challenge_backend
+    ports:
+      -   "6162:80"
+    volumes:
+      - ./backend:/var/www/backend
+      - ./frontend/dist:/var/www/frontend
+      - ./docker-compose/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - onfly_challenge_network
+
+  # MySQL Service Container
+  onfly_challenge_db:
+    image: mysql:latest
+    container_name: onfly_challenge_db
+    restart: unless-stopped
+    ports:
+      -   "3337:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: onfly-challenge-db
+    volumes:
+      - onfly_challenge_db_data:/var/lib/mysql
+    networks:
+      - onfly_challenge_network
+    env_file:
+      - ./backend/.env
+
+  # PhpMyAdmin Service Container
+  onfly_challenge_phpmyadmin:
+    image: phpmyadmin:5.2.2-apache
+    container_name: onfly_challenge_phpmyadmin
+    restart: unless-stopped
+    ports:
+      -   "8383:80"
+    environment:
+      PMA_HOST: onfly_challenge_db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: password
+    depends_on:
+      -   onfly_challenge_db
+    networks:
+      -   onfly_challenge_network
+    env_file:
+      - ./backend/.env
+
+  # Vue Service Container
+  onfly_challenge_frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+
+volumes:
+  onfly_challenge_db_data:
+    driver: local
+
+networks:
+  onfly_challenge_network:
+    driver: bridge
