@@ -28,21 +28,26 @@ it('should can logout an authenticated user', function () {
         ->assertNoContent();
 });
 
-it('should cannot logout unauthenticated user', function () {
+it('requires authentication for logout', function () {
     postJson(route('logout'))
         ->assertUnauthorized();
 });
 
-// it('should cand refresh a jwt token', function () {
-//     $token = loginUserAndGetToken();
+it('should can refresh a jwt token', function () {
+    $token = loginUserAndGetToken();
 
-//     $response = postJson(route('refresh'), [], ['Authorization' => 'Bearer ' . $token])
-//         ->assertOk
-//         ->assertJsonStructure([
-//             'access_token',
-//             'token_type',
-//             'expires_in'
-//         ]);
+    $response = postJson(route('refresh'), [], ['Authorization' => 'Bearer ' . $token])
+        ->assertOk()
+        ->assertJsonStructure([
+            'access_token',
+            'token_type',
+            'expires_in'
+        ]);
 
-//     assertNotEquals($token, $response->json('access_token'));
-// });
+    assertNotEquals($token, $response->json('access_token'));
+});
+
+it('requires authentication for refresh token', function () {
+    postJson(route('refresh'))
+        ->assertUnauthorized();
+});
