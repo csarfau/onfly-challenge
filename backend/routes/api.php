@@ -12,5 +12,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
-    Route::post('/travel-request/create', [TravelRequestController::class, 'store'])->name('travel-request.store');
+    Route::post('/travel-requests/create', [TravelRequestController::class, 'store'])->name('travel-request.store');
+    Route::get('/travel-requests', [TravelRequestController::class, 'index'])->name('travel-request.index');
+    Route::get('/travel-requests/{travelRequest}', [TravelRequestController::class, 'show'])->name('travel-request.show');
 });
