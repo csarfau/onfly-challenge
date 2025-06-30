@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\TravelResquestStatus;
 use Exception;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\TravelRequest;
+use App\Enums\TravelResquestStatus;
+use Illuminate\Validation\Rules\Enum;
+use App\Http\Resources\TravelRequestResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreTravelRequestRequest;
-use App\Http\Resources\TravelRequestResource;
 use App\Notifications\TravelRequestStatusChange;
-use Illuminate\Validation\Rules\Enum;
-use App\Models\User;
 
 class TravelRequestController extends Controller
 {
