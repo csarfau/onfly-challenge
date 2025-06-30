@@ -92,5 +92,10 @@ class TravelRequestController extends Controller
         $travelRequest->save();
 
         $user->notify(new TravelRequestStatusChange($user, $status, $travelRequest));
+
+        return response()->json([
+            'message' => 'Status update successful.',
+            'data' => new TravelRequestResource($travelRequest)
+        ]);
     }
 }
