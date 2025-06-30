@@ -10,13 +10,11 @@ return new class extends Migration
     {
         Schema::create('travel_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
             $table->string('requester_name');
             $table->string('destination');
             $table->date('departure_date');
             $table->date('return_date');
             $table->string('status')->default('requested');
-            $table->boolean('is_admin')->default(false);
             $table->timestamps();
         });
     }
