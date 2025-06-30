@@ -7,13 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TravelRequest extends Model
 {
-    public $fillable =
-    [
-        'requester_name',
-        'destination',
-        'departure_date',
-        'return_date',
-        'status',
+    public $guarded = [];
+
+    protected $casts = [
+        'departure_date' => 'datetime',
+        'return_date' => 'datetime',
     ];
 
     public function user(): BelongsTo
