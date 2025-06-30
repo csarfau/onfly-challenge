@@ -38,6 +38,15 @@ class AuthController extends Controller
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
+    public function refresh()
+    {
+        /** @var JWTGuard $jwtGuard */
+        $jwtGuard = auth('api');
+
+        $token = $jwtGuard->refresh();
+        return $this->respondWithToken($token);
+    }
+
     protected function respondWithToken($token)
     {
         return response()->json([
