@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\TravelResquestStatus;
 use Exception;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\TravelRequest;
+use App\Enums\TravelResquestStatus;
+use Illuminate\Validation\Rules\Enum;
+use App\Http\Resources\TravelRequestResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreTravelRequestRequest;
-use App\Http\Resources\TravelRequestResource;
+use App\Notifications\TravelRequestStatusChange;
 
 class TravelRequestController extends Controller
 {
@@ -67,5 +70,32 @@ class TravelRequestController extends Controller
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function update(Request $request, TravelRequest $travelRequest)
+    {
+        $this->authorize('update', TravelRequest::class);
+        /** @var User $user */
+        $user = auth('api')->user();
+
+        $status = $request->validate([
+            'status' => ['string', new Enum(TravelResquestStatus::class)]
+        ])['status'];
+
+        if ($travelRequest->status === TravelResquestStatus::APPROVED->value && $status !== TravelResquestStatus::APPROVED->value) {
+            return response()->json([
+                'error' => 'Its not possible cancel an accepted travel order!'
+            ], Response::HTTP_CONFLICT);
+        }
+
+        $travelRequest->status = $status;
+        $travelRequest->save();
+
+        $user->notify(new TravelRequestStatusChange($user, $status, $travelRequest));
+
+        return response()->json([
+            'message' => 'Status update successful.',
+            'data' => new TravelRequestResource($travelRequest)
+        ]);
     }
 }
