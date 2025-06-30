@@ -16,7 +16,6 @@ return new class extends Migration
             $table->date('departure_date');
             $table->date('return_date');
             $table->string('status')->default('requested');
-            $table->boolean('is_admin')->default(false);
             $table->timestamps();
         });
     }
