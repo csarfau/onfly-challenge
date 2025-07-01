@@ -13,7 +13,8 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create($request->validated());
-        return response()->json($user, Response::HTTP_OK);
+        $token = auth('api')->login($user);
+        return $this->respondWithToken($token);
     }
 
     public function login(Request $request)
@@ -45,6 +46,11 @@ class AuthController extends Controller
 
         $token = $jwtGuard->refresh();
         return $this->respondWithToken($token);
+    }
+
+    public function me()
+    {
+        return response()->json(auth('api')->user());
     }
 
     protected function respondWithToken($token)

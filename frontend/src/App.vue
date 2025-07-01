@@ -1,47 +1,51 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+import { useAuth } from '@/stores/auth.js'
+
+const auth = useAuth()
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <header class="bg-gray-800 text-gray-50 p-4 shadow-md">
+    <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center flex-wrap gap-4">
+      <h1 class="text-3xl font-bold text-blue-400">Travel Flow</h1>
+      <nav class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto">
+        <template v-if="auth.isAuthenticated">
+          <RouterLink :to="{ name: 'dashboard' }"
+            class="text-gray-50 hover:text-blue-300 transition-colors duration-200 ease-in-out px-2 py-1 rounded"
+            active-class="font-semibold text-blue-300 bg-gray-700">
+            Dashboard
+          </RouterLink>
+          <RouterLink :to="{ name: 'create' }"
+            class="text-gray-50 hover:text-blue-300 transition-colors duration-200 ease-in-out px-2 py-1 rounded"
+            active-class="font-semibold text-blue-300 bg-gray-700">
+            New Travel Request
+          </RouterLink>
+          <button @click="auth.logout()"
+            class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors duration-200 ease-in-out text-base">
+            Logout
+          </button>
+        </template>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+        <template v-else>
+          <RouterLink :to="{ name: 'login' }"
+            class="text-gray-50 hover:text-blue-300 transition-colors duration-200 ease-in-out px-2 py-1 rounded"
+            active-class="font-semibold text-blue-300 bg-gray-700">
+            Login
+          </RouterLink>
+          <RouterLink :to="{ name: 'register' }"
+            class="text-gray-50 hover:text-blue-300 transition-colors duration-200 ease-in-out px-2 py-1 rounded"
+            active-class="font-semibold text-blue-300 bg-gray-700">
+            Register
+          </RouterLink>
+        </template>
+      </nav>
     </div>
   </header>
 
-  <main>
-    <TheWelcome />
+  <main class="py-8 bg-gray-50 min-h-[calc(100vh-6rem)]">
+    <div class="container mx-auto px-4">
+      <RouterView />
+    </div>
   </main>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
