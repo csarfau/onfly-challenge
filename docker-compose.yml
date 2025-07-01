@@ -11,7 +11,7 @@ services:
     image: onfly_challenge_backend_image
     restart: unless-stopped
     depends_on:
-      - onfly_challenge_db
+      - db
     working_dir: /var/www
     volumes:
       - ./backend/:/var/www/
@@ -37,9 +37,9 @@ services:
       - onfly_challenge_network
 
   # MySQL Service Container
-  onfly_challenge_db:
+  db:
     image: mysql:latest
-    container_name: onfly_challenge_db
+    container_name: db
     restart: unless-stopped
     ports:
       -   "3337:3306"
@@ -47,7 +47,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: onfly-challenge-db
     volumes:
-      - onfly_challenge_db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
     networks:
       - onfly_challenge_network
     env_file:
@@ -61,12 +61,12 @@ services:
     ports:
       -   "8383:80"
     environment:
-      PMA_HOST: onfly_challenge_db
+      PMA_HOST: db
       PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: password
     depends_on:
-      -   onfly_challenge_db
+      -   db
     networks:
       -   onfly_challenge_network
     env_file:
@@ -81,7 +81,7 @@ services:
       - "8080:80"
 
 volumes:
-  onfly_challenge_db_data:
+  db_data:
     driver: local
 
 networks:
