@@ -14,8 +14,8 @@ it('an authenticated user must be able create a travel request', function () {
     actingAs($user, 'api')->postJson(route('travel-request.store'), [
         'requester_name'    => $user->name,
         'destination'       => $destination,
-        'departure_date'    => today()->format('d/m/Y'),
-        'return_date'       => today()->addDays(10)->format('d/m/Y'),
+        'departure_date'    => today()->format('Y-m-d'),
+        'return_date'       => today()->addDays(10)->format('Y-m-d'),
     ])->assertCreated();
 
     assertDatabaseHas('travel_requests', [
