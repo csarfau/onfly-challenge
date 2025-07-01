@@ -21,15 +21,8 @@ class TravelRequestController extends Controller
         $this->authorize('viewAny', TravelRequest::class);
         $departureDate = $request->input('departure_date');
         $returnDate = $request->input('return_date');
-        $travelRequestStatus = TravelResquestStatus::tryFrom($request->input('status'))->value;
-
-        $formattedDepartureDate = $departureDate
-            ? Carbon::createFromFormat('d/m/Y', $departureDate)->format('Y-m-d')
-            : null;
-
-        $formattedReturnDate = $returnDate
-            ? Carbon::createFromFormat('d/m/Y', $returnDate)->format('Y-m-d')
-            : null;
+        $statusBase = TravelResquestStatus::tryFrom($request->input('status'));
+        $travelRequestStatus = $statusBase ? $statusBase->value : null;
 
         $travelRequestsQuery = $request->user()->isAdmin()
             ? TravelRequest::query()
@@ -37,7 +30,7 @@ class TravelRequestController extends Controller
 
         $travelRequests = $travelRequestsQuery
             ->filterByStatus($travelRequestStatus)
-            ->filterByPeriod($formattedDepartureDate, $formattedReturnDate)
+            ->filterByPeriod($departureDate, $returnDate)
             ->filterByDestination($request->destination)
             ->paginate(10);
 
@@ -55,8 +48,8 @@ class TravelRequestController extends Controller
         $newTravelRequest = $request->validated();
         $newTravelRequest['user_id'] = $request->user()->id;
         $newTravelRequest['status'] = TravelResquestStatus::REQUESTED->value;
-        $newTravelRequest['departure_date'] = Carbon::createFromFormat('d/m/Y', $newTravelRequest['departure_date']);
-        $newTravelRequest['return_date'] = Carbon::createFromFormat('d/m/Y', $newTravelRequest['return_date']);
+        $newTravelRequest['departure_date'] = $newTravelRequest['departure_date'];
+        $newTravelRequest['return_date'] = $newTravelRequest['return_date'];
 
         try {
             $createdTravelRequest = TravelRequest::create($newTravelRequest);

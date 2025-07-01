@@ -17,8 +17,8 @@ class StoreTravelRequestRequest extends FormRequest
         return [
             'requester_name' => ['required', 'max:255'],
             'destination' => ['required', 'max:255'],
-            'departure_date' => ['required', 'after_or_equal:today', 'date_format :d/m/Y'],
-            'return_date' => ['required', 'after_or_equal:departure_date', 'date_format :d/m/Y'],
+            'departure_date' => ['required', 'after_or_equal:today', 'date'],
+            'return_date' => ['required', 'after_or_equal:departure_date', 'date'],
         ];
     }
 }
