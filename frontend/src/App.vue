@@ -1,47 +1,116 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+import { useAuth } from '@/stores/auth.js'
+
+const auth = useAuth()
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <header class="app-header">
+    <div class="container header-content">
+      <h1 class="app-title">Travel Flow</h1>
+      <nav class="main-nav">
+        <template v-if="auth.isAuthenticated">
+          <RouterLink :to="{ name: 'dashboard' }">Dashboard</RouterLink>
+          <RouterLink :to="{ name: 'create' }">New Travel Request</RouterLink>
+          <button @click="auth.logout()" class="logout-button">Logout</button>
+        </template>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+        <template v-else>
+          <RouterLink :to="{ name: 'login' }">Login</RouterLink>
+          <RouterLink :to="{ name: 'register' }">Register</RouterLink>
+        </template>
+      </nav>
     </div>
   </header>
 
-  <main>
-    <TheWelcome />
+  <main class="app-main">
+    <div class="container">
+      <RouterView />
+    </div>
   </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.app-header {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 1.5rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+.app-title {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  color: #ecf0f1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  padding: 0.5rem 0;
+}
+
+.main-nav a:hover,
+.main-nav a.router-link-exact-active {
+  color: #3498db;
+}
+
+.logout-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+}
+
+.app-main {
+  padding: 2rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  .main-nav {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+  .app-title {
+    margin-bottom: 1rem;
   }
 }
 </style>
