@@ -14,6 +14,7 @@ O projeto foi desenvolvido para um desafio técnico.
 * **Vue:** Para construção do frontend
 * **Pinia:** Para estados globais
 * **Vue Router:** Para roteamento da SPA
+* **Axios:** Para requisições via protocolo HTTP
 * **Nginx:** Servidor Web para servir a API e o frontend
 * **Docker:** Como ambiente de desenvolvimento (dockerização)
 
