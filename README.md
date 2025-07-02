@@ -90,7 +90,7 @@ docker-compose exec onfly_challenge_backend php artisan key:generate
 docker-compose exec onfly_challenge_backend php artisan jwt:secret
 ```
 
-# 4. Executar as migrações do banco de dados e popular com dados iniciais (seeders)
+### 4. Executar as migrações do banco de dados e popular com dados iniciais (seeders)
 ```bash
 docker-compose exec onfly_challenge_backend php artisan migrate --force --seed
 ```
