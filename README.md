@@ -12,7 +12,7 @@ O projeto foi desenvolvido para um desafio técnico.
 * **Pest:** Para testes automatizados
 * **MySQL:** Para o banco de dados
 * **Vue:** Para construção do frontend
-* **Pinia:** Para estados globais
+* **Pinia:** Para gerenciamento de estados globais
 * **Vue Router:** Para roteamento da SPA
 * **Axios:** Para requisições via protocolo HTTP
 * **Nginx:** Servidor Web para servir a API e o frontend
