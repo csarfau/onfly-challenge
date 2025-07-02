@@ -5,7 +5,8 @@ import path from 'node:path'
 
 export default defineConfig({
     plugins: [
-        vue()],
+        vue()
+    ],
     alias: {
         '@': path.resolve(__dirname, './src'),
     },

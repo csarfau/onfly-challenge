@@ -11,7 +11,7 @@ services:
     image: onfly_challenge_backend_image
     restart: unless-stopped
     depends_on:
-      - db
+      - onfly_challenge_db
     working_dir: /var/www
     volumes:
       - ./backend/:/var/www/
@@ -20,9 +20,11 @@ services:
     env_file:
       - ./backend/.env
 
-  # NGINX Service Container
+  # NGINX and frontend build Service Container
   onfly_challenge_webserver:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     container_name: onfly_challenge_webserver
     restart: unless-stopped
     depends_on:
@@ -30,16 +32,15 @@ services:
     ports:
       -   "6162:80"
     volumes:
+      - ./docker-compose/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - ./backend:/var/www/backend
-      - ./frontend/dist:/var/www/frontend
-      - ./docker-compose/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - onfly_challenge_network
 
   # MySQL Service Container
-  db:
+  onfly_challenge_db:
     image: mysql:latest
-    container_name: db
+    container_name: onfly_challenge_db
     restart: unless-stopped
     ports:
       -   "3337:3306"
@@ -47,7 +48,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: onfly-challenge-db
     volumes:
-      - db_data:/var/lib/mysql
+      - onfly_challenge_db_data:/var/lib/mysql
     networks:
       - onfly_challenge_network
     env_file:
@@ -61,27 +62,19 @@ services:
     ports:
       -   "8383:80"
     environment:
-      PMA_HOST: db
+      PMA_HOST: onfly_challenge_db
       PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: password
     depends_on:
-      -   db
+      -   onfly_challenge_db
     networks:
       -   onfly_challenge_network
     env_file:
       - ./backend/.env
 
-  # Vue Service Container
-  onfly_challenge_frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-
 volumes:
-  db_data:
+  onfly_challenge_db_data:
     driver: local
 
 networks:
