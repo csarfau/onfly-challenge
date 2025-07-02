@@ -32,7 +32,10 @@ Siga os passos abaixo para configurar e executar a aplicação em seu ambiente l
 Primeiro, clone o repositório do projeto para a sua máquina local e navegue para a pasta do projeto.
 
 ```bash
-git clone [link-repositorio]
+git clone https://github.com/csarfau/onfly-challenge.git
+# Ou se tiver utilizando SSH:
+git clone git@github.com:csarfau/onfly-challenge.git
+# Entre na pasta do projeto
 cd onfly-travel
 ```
 
