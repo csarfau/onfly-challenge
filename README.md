@@ -48,7 +48,7 @@ cp ./backend/.env.example ./backend/.env
 ```
 
 > [!NOTE]
-> As variáveis de ambiente já estão prontas para funcoinar localmente com Docker, caso deseje alterar nome do banco de dados ou senha de conexão
+> As variáveis de ambiente já estão prontas para funcionar localmente com Docker, caso deseje alterar nome do banco de dados ou senha de conexão
 > deve ser alterado tanto no .env (DB_DATABASE, DB_PASSWORD), quanto as variáveis no arquivo docker-compose.yml (MYSQL_DATABASE, MYSQL_ROOT_PASSWORD) com os mesmos valores respectivamente.
 
 ### 3. Construir e Iniciar os Containers
@@ -65,19 +65,26 @@ Após os containers estarem em pé, precisamos executar alguns comandos dentro d
 
 O nome do serviço do backend no `docker-compose.yml` é `onfly_challenge_backend`.
 
+### 1. Instalar as dependências do PHP com o Composer
 ```bash
-# 1. Instalar as dependências do PHP com o Composer
 docker-compose exec onfly_challenge_backend composer install
+```
 
-# 2. Gerar a chave de aplicação do Laravel (APP_KEY)
+### 2. Gerar a chave de aplicação do Laravel (APP_KEY)
+```bash
 docker-compose exec onfly_challenge_backend php artisan key:generate
+```
 
-# 3. Gerar o segredo para a autenticação JWT
+### 3. Gerar o segredo para a autenticação JWT
+```bash
 docker-compose exec onfly_challenge_backend php artisan jwt:secret
+```
 
 # 4. Executar as migrações do banco de dados e popular com dados iniciais (seeders)
+```bash
 docker-compose exec onfly_challenge_backend php artisan migrate --force --seed
 ```
+
 ## Acessando a Aplicação
 
 Se tudo deu certo até aqui, você poderá acessar a aplicação no endereço:
@@ -85,12 +92,12 @@ Se tudo deu certo até aqui, você poderá acessar a aplicação no endereço:
 
 ## Estrutura do Projeto
 
-A estrutura de pastas principal do projeto é a seguinte:
-├── backend/      # Contém a aplicação Laravel (API)
-├── frontend/     # Contém a aplicação Vue.js (Cliente)
-├── docker/       # Contém configurações do Docker, como arquivos do Nginx
-└── docker-compose.yml  # Arquivo principal do Docker Compose
-└── README.md     # Este arquivo
+A estrutura de pastas principal do projeto é a seguinte:  
+├── backend/      # Contém a aplicação Laravel (API)  
+├── frontend/     # Contém a aplicação Vue.js (Cliente)  
+├── docker/       # Contém configurações do Docker, como arquivos do Nginx  
+└── docker-compose.yml  # Arquivo principal do Docker Compose  
+└── README.md     # Este arquivo  
 
 > [!IMPORTANT]
 > Para testar as funcionalidades de Admin, foi criado um usuário padrão para isso, com as seguintes credenciais:
