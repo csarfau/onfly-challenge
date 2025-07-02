@@ -47,6 +47,21 @@ export const useAuth = defineStore('auth', () => {
         }
     }
 
+    async function register(credentials) {
+        try {
+            const response = await http.post('/auth/register', credentials);
+            setToken(response.data.access_token);
+            http.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+            await checkToken();
+            isAuthenticated.value = true
+            return true;
+        } catch (error) {
+            console.error("Login error:", error.response?.data || error.message);
+            removeAuthData();
+            throw error;
+        }
+    }
+
     async function login(credentials) {
         try {
             const response = await http.post('/auth/login', credentials);
@@ -82,6 +97,7 @@ export const useAuth = defineStore('auth', () => {
         isExiting,
         token,
         user,
+        register,
         login,
         logout,
         setToken,
