@@ -8,12 +8,14 @@ O projeto foi desenvolvido para um desafio técnico.
 
 ## Tecnologias Utilizadas
 
-* **Backend:** [Laravel](https://laravel.com/)
-* **Frontend:** [Vue.js](https://vuejs.org/)
-* **Banco de Dados:** [MySQL](https://www.mysql.com/)
-* **Servidor Web:** [Nginx](https://www.nginx.com/)
-* **Ambiente de Desenvolvimento:** [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
-* **Gerenciador de Dependências PHP:** [Composer](https://getcomposer.org/)
+* **Laravel:** Para construção da API/backend
+* **Pest:** Para testes automatizados
+* **MySQL:** Para o banco de dados
+* **Vue:** Para construção do frontend
+* **Pinia:** Para estados globais
+* **Vue Router:** Para roteamento da SPA
+* **Nginx:** Servidor Web para servir a API e o frontend
+* **Docker:** Como ambiente de desenvolvimento (dockerização)
 
 ## Pré-requisitos
 
@@ -31,11 +33,18 @@ Siga os passos abaixo para configurar e executar a aplicação em seu ambiente l
 
 Primeiro, clone o repositório do projeto para a sua máquina local e navegue para a pasta do projeto.
 
+- Caso utilize HTTP:
 ```bash
 git clone https://github.com/csarfau/onfly-challenge.git
-# Ou se tiver utilizando SSH:
+```
+
+- Ou se tiver utilizando SSH:
+```bash
 git clone git@github.com:csarfau/onfly-challenge.git
-# Entre na pasta do projeto
+```
+
+- Entre na pasta do projeto
+```bash
 cd onfly-challenge
 ```
 
@@ -88,18 +97,15 @@ docker-compose exec onfly_challenge_backend php artisan migrate --force --seed
 ## Acessando a Aplicação
 
 Se tudo deu certo até aqui, você poderá acessar a aplicação no endereço:
-> http://localhost:6162
-
-## Estrutura do Projeto
-
-A estrutura de pastas principal do projeto é a seguinte:  
-├── backend/      # Contém a aplicação Laravel (API)  
-├── frontend/     # Contém a aplicação Vue.js (Cliente)  
-├── docker/       # Contém configurações do Docker, como arquivos do Nginx  
-└── docker-compose.yml  # Arquivo principal do Docker Compose  
-└── README.md     # Este arquivo  
+> http://localhost:6162 
 
 > [!IMPORTANT]
 > Para testar as funcionalidades de Admin, foi criado um usuário padrão para isso, com as seguintes credenciais:
 > email: admin@example.com
 > senha: password
+
+## Rodando testes
+Para rodar os testes, utilize o seguinte comando:
+```bash
+docker-compose exec onfly_challenge_backend php artisan test
+```
