@@ -36,7 +36,7 @@ git clone https://github.com/csarfau/onfly-challenge.git
 # Ou se tiver utilizando SSH:
 git clone git@github.com:csarfau/onfly-challenge.git
 # Entre na pasta do projeto
-cd onfly-travel
+cd onfly-challenge
 ```
 
 ### 2. Configurar o Ambiente Backend
