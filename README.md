@@ -97,8 +97,7 @@ docker-compose exec onfly_challenge_backend php artisan migrate --force --seed
 
 ## Acessando a Aplicação
 
-Se tudo deu certo até aqui, você poderá acessar a aplicação no endereço:
-> http://localhost:6162 
+Se tudo deu certo até aqui, você poderá acessar a aplicação no endereço: `http://localhost:6162`
 
 > [!IMPORTANT]
 > Para testar as funcionalidades de Admin, foi criado um usuário padrão para isso, com as seguintes credenciais:
